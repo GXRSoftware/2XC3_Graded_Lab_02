@@ -2,7 +2,6 @@ from collections import deque
 
 #Undirected graph using an adjacency list
 class Graph:
-
     def __init__(self, n):
         self.adj = {}
         for i in range(n):
@@ -25,7 +24,15 @@ class Graph:
     def number_of_nodes():
         return len()
 
-
+g = Graph
+g.__init__(g, 7)
+g.add_edge(g, 1, 2)
+g.add_edge(g, 1, 3)
+g.add_edge(g, 2, 4)
+g.add_edge(g, 3, 4)
+g.add_edge(g, 3, 5)
+g.add_edge(g, 4, 5)
+g.add_edge(g, 4, 6)
 #Breadth First Search
 def BFS(G, node1, node2):
     Q = deque([node1])
@@ -43,6 +50,29 @@ def BFS(G, node1, node2):
                 marked[node] = True
     return False
 
+#Breadth First Search
+def BFS2(G, node1, node2):
+    Q = deque([(node1, [])])
+    marked = {node1 : True}
+
+    for node in G.adj:
+        if node != node1:
+            marked[node] = False
+    
+    
+    while len(Q) != 0:
+        current_node = Q.popleft()
+        current_node[1].append(current_node[0])
+        for node in G.adj[current_node[0]]:
+            if node == node2:
+                current_node[1].append(node)
+                return current_node[1]
+            if not marked[node]:
+                Q.append((node, current_node[1]))
+                marked[node] = True
+    return False
+
+print(BFS2(g, 1, 6))
 
 #Depth First Search
 def DFS(G, node1, node2):
