@@ -1,5 +1,8 @@
 from collections import deque
 
+##########
+# Week 1 #
+##########
 #Undirected graph using an adjacency list
 class Graph:
     def __init__(self, n):
@@ -21,18 +24,18 @@ class Graph:
             self.adj[node1].append(node2)
             self.adj[node2].append(node1)
 
-    def number_of_nodes():
-        return len()
+    def number_of_nodes(self):
+        return len(self.adj.keys())
 
-g = Graph
-g.__init__(g, 7)
-g.add_edge(g, 1, 2)
-g.add_edge(g, 1, 3)
-g.add_edge(g, 2, 4)
-g.add_edge(g, 3, 4)
-g.add_edge(g, 3, 5)
-g.add_edge(g, 4, 5)
-g.add_edge(g, 4, 6)
+g = Graph(7)
+g.add_edge(1, 2)
+g.add_edge(1, 3)
+g.add_edge(2, 4)
+g.add_edge(3, 4)
+g.add_edge(3, 5)
+g.add_edge(4, 5)
+g.add_edge(4, 6)
+
 #Breadth First Search
 def BFS(G, node1, node2):
     Q = deque([node1])
@@ -50,7 +53,7 @@ def BFS(G, node1, node2):
                 marked[node] = True
     return False
 
-#Breadth First Search
+#Breadth First Search Path
 def BFS2(G, node1, node2):
     Q = deque([(node1, [])])
     marked = {node1 : True}
@@ -62,17 +65,51 @@ def BFS2(G, node1, node2):
     
     while len(Q) != 0:
         current_node = Q.popleft()
-        current_node[1].append(current_node[0])
+        path = current_node[1].copy()
+        path.append(current_node[0])
         for node in G.adj[current_node[0]]:
             if node == node2:
-                current_node[1].append(node)
-                return current_node[1]
+                path.append(node)
+                return path
             if not marked[node]:
-                Q.append((node, current_node[1]))
+                Q.append((node, path))
                 marked[node] = True
-    return False
+    return []
 
 print(BFS2(g, 1, 6))
+print(BFS2(g, 1, 5))
+print(BFS2(g, 1, 4))
+print(BFS2(g, 0, 4))
+print(g.number_of_nodes())
+
+#Breadth First Search Predecessor Dictionary
+def BFS3(G, node1):
+    P = {}
+    Q = deque([node1])
+    marked = {node1 : True}
+
+    for node in G.adj:
+        if node != node1:
+            marked[node] = False
+    
+    
+    while len(Q) != 0:
+        current_node = Q.popleft()
+        for node in G.adj[current_node]:
+            if not marked[node]:
+                Q.append(node)
+                marked[node] = True
+                P[node] = current_node
+    return P
+
+print(BFS3(g, 0))
+print(BFS3(g, 1))
+print(BFS3(g, 2))
+print(BFS3(g, 3))
+print(BFS3(g, 4))
+print(BFS3(g, 5))
+print(BFS3(g, 6))
+
 
 #Depth First Search
 def DFS(G, node1, node2):
@@ -89,6 +126,90 @@ def DFS(G, node1, node2):
                     return True
                 S.append(node)
     return False
+
+import random
+def create_random_graph(i, j):
+    G = Graph(i)
+    for e in range(j):
+        n1, n2 = random.randint(0, i - 1), random.randint(0, i - 1)
+        while G.are_connected(n1, n2) or n1 == n2:
+            n1, n2 = random.randint(0, i - 1), random.randint(0, i - 1)
+        G.add_edge(n1, n2)
+    return G
+
+RG = create_random_graph(100, 50)
+
+print(BFS(RG, 0, 99))
+print(BFS2(RG, 0, 99))
+print(BFS3(RG, 0))
+
+def is_connected(G):
+    Q = deque([0])
+    visited = {0 : True}
+
+    for node in G.adj:
+        if node != 0:
+            visited[node] = False
+    
+    while len(Q) != 0:
+        current_node = Q.popleft()
+        for node in G.adj[current_node]:
+            if not visited[node]:
+                Q.append(node)
+                visited[node] = True
+    return all(visited.values())
+
+print(is_connected(g))
+g.add_edge(0, 1)
+print(is_connected(g))
+RG = create_random_graph(10, 45)
+print(is_connected(RG))
+RG = create_random_graph(10, 1)
+print(is_connected(RG))
+
+# Experiments
+import matplotlib
+import random
+import timeit
+import matplotlib.pyplot as plt
+import numpy as np
+import math
+
+################
+# Experiment 1 #
+################
+
+
+
+################
+# Experiment 2 #
+################
+nodes = 100
+max_edges = (nodes * (nodes - 1)) // 2
+run_edges = list((x for x in range(max_edges // 10)))
+RUNS = 1000000
+
+data = []
+for e in run_edges:
+    print(e)
+    c = []
+    for i in range(RUNS):
+        G = create_random_graph(nodes, e)
+        c.append(is_connected(G))
+    data.append((sum(c) / RUNS) * 100)
+
+x_percent = list((e / max_edges) * 100 for e in run_edges)
+plt.plot(x_percent, data, color='red', label='Number of Edges')
+
+plt.title('Probability of Graph being Connected by Number of Edges')
+plt.xlabel('Percentage of Max Edges')
+plt.ylabel('Percentage of Connected')
+plt.legend()
+plt.show()
+
+##########
+# Week 2 #
+##########
 
 #Use the methods below to determine minimum vertex covers
 
