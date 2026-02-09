@@ -1,3 +1,8 @@
+# For testing
+graph = False
+testW1 = False
+
+
 from collections import deque
 
 ##########
@@ -27,14 +32,16 @@ class Graph:
     def number_of_nodes(self):
         return len(self.adj.keys())
 
-g = Graph(7)
-g.add_edge(1, 2)
-g.add_edge(1, 3)
-g.add_edge(2, 4)
-g.add_edge(3, 4)
-g.add_edge(3, 5)
-g.add_edge(4, 5)
-g.add_edge(4, 6)
+if testW1:
+    g = Graph(7)
+    g.add_edge(1, 2)
+    g.add_edge(1, 3)
+    g.add_edge(2, 4)
+    g.add_edge(3, 4)
+    g.add_edge(3, 5)
+    g.add_edge(4, 5)
+    g.add_edge(4, 6)
+    print(g.adj)
 
 #Breadth First Search
 def BFS(G, node1, node2):
@@ -76,11 +83,12 @@ def BFS2(G, node1, node2):
                 marked[node] = True
     return []
 
-print(BFS2(g, 1, 6))
-print(BFS2(g, 1, 5))
-print(BFS2(g, 1, 4))
-print(BFS2(g, 0, 4))
-print(g.number_of_nodes())
+if testW1:
+    print(BFS2(g, 1, 6))
+    print(BFS2(g, 1, 5))
+    print(BFS2(g, 1, 4))
+    print(BFS2(g, 0, 4))
+    print(g.number_of_nodes())
 
 #Breadth First Search Predecessor Dictionary
 def BFS3(G, node1):
@@ -102,13 +110,14 @@ def BFS3(G, node1):
                 P[node] = current_node
     return P
 
-print(BFS3(g, 0))
-print(BFS3(g, 1))
-print(BFS3(g, 2))
-print(BFS3(g, 3))
-print(BFS3(g, 4))
-print(BFS3(g, 5))
-print(BFS3(g, 6))
+if testW1:
+    print(BFS3(g, 0))
+    print(BFS3(g, 1))
+    print(BFS3(g, 2))
+    print(BFS3(g, 3))
+    print(BFS3(g, 4))
+    print(BFS3(g, 5))
+    print(BFS3(g, 6))
 
 
 #Depth First Search
@@ -137,11 +146,12 @@ def create_random_graph(i, j):
         G.add_edge(n1, n2)
     return G
 
-RG = create_random_graph(100, 50)
+if testW1:
+    RG = create_random_graph(100, 50)
 
-print(BFS(RG, 0, 99))
-print(BFS2(RG, 0, 99))
-print(BFS3(RG, 0))
+    print(BFS(RG, 0, 99))
+    print(BFS2(RG, 0, 99))
+    print(BFS3(RG, 0))
 
 def is_connected(G):
     Q = deque([0])
@@ -159,13 +169,14 @@ def is_connected(G):
                 visited[node] = True
     return all(visited.values())
 
-print(is_connected(g))
-g.add_edge(0, 1)
-print(is_connected(g))
-RG = create_random_graph(10, 45)
-print(is_connected(RG))
-RG = create_random_graph(10, 1)
-print(is_connected(RG))
+if testW1:
+    print(is_connected(g))
+    g.add_edge(0, 1)
+    print(is_connected(g))
+    RG = create_random_graph(10, 45)
+    print(is_connected(RG))
+    RG = create_random_graph(10, 1)
+    print(is_connected(RG))
 
 # Experiments
 import matplotlib
@@ -184,28 +195,29 @@ import math
 ################
 # Experiment 2 #
 ################
-nodes = 100
-max_edges = (nodes * (nodes - 1)) // 2
-run_edges = list((x for x in range(max_edges // 10)))
-RUNS = 1000000
+if(graph):
+    nodes = 100
+    max_edges = (nodes * (nodes - 1)) // 2
+    run_edges = list((x for x in range(max_edges // 10)))
+    RUNS = 1000000
 
-data = []
-for e in run_edges:
-    print(e)
-    c = []
-    for i in range(RUNS):
-        G = create_random_graph(nodes, e)
-        c.append(is_connected(G))
-    data.append((sum(c) / RUNS) * 100)
+    data = []
+    for e in run_edges:
+        print(e)
+        c = []
+        for i in range(RUNS):
+            G = create_random_graph(nodes, e)
+            c.append(is_connected(G))
+        data.append((sum(c) / RUNS) * 100)
 
-x_percent = list((e / max_edges) * 100 for e in run_edges)
-plt.plot(x_percent, data, color='red', label='Number of Edges')
+    x_percent = list((e / max_edges) * 100 for e in run_edges)
+    plt.plot(x_percent, data, color='red', label='Number of Edges')
 
-plt.title('Probability of Graph being Connected by Number of Edges')
-plt.xlabel('Percentage of Max Edges')
-plt.ylabel('Percentage of Connected')
-plt.legend()
-plt.show()
+    plt.title('Probability of Graph being Connected by Number of Edges')
+    plt.xlabel('Percentage of Max Edges')
+    plt.ylabel('Percentage of Connected')
+    plt.legend()
+    plt.show()
 
 ##########
 # Week 2 #
@@ -241,4 +253,28 @@ def MVC(G):
                 min_cover = subset
     return min_cover
 
+
+##################
+# Approximations #
+##################
+def approx1(G):
+    C = {}
+
+    # Finding the highet degree
+    v = (0, 0)
+    for node in G.adj.keys():
+        d = len(G.adj[node])
+        if v[1] < d:
+            v = (node, d)
+    return c
+
+def approx2(G):
+    C = {}
+
+    return c
+
+def approx3(G):
+    C = {}
+
+    return c
 
