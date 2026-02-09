@@ -1,7 +1,7 @@
 # For testing
 graph = False
 testW1 = False
-
+testW2 = False
 
 from collections import deque
 
@@ -244,7 +244,7 @@ def is_vertex_cover(G, C):
     return True
 
 def MVC(G):
-    nodes = [i for i in range(G.get_size())]
+    nodes = [i for i in range(G.number_of_nodes())]
     subsets = power_set(nodes)
     min_cover = nodes
     for subset in subsets:
@@ -258,23 +258,102 @@ def MVC(G):
 # Approximations #
 ##################
 def approx1(G):
-    C = {}
+    lG = G.adj.copy()
+    C = set()
+    cover = False
 
-    # Finding the highet degree
-    v = (0, 0)
-    for node in G.adj.keys():
-        d = len(G.adj[node])
-        if v[1] < d:
-            v = (node, d)
-    return c
+    while (not cover):
+        # Finding the highest degree
+        v = (0, 0)
+        for node in lG.keys():
+            d = len(lG[node])
+            if v[1] < d:
+                v = (node, d)
+        v = v[0]
+
+        # Add v to C
+        C.add(v)
+
+        # Remove all edges incident to node v from G
+        lG[v] = []
+        for node in lG.keys():
+            if v in lG[node]:
+                lG[node].remove(v)
+        
+        # Check for cover
+        cover = is_vertex_cover(G, C)
+    
+    # Return the vertex cover
+    return C
 
 def approx2(G):
-    C = {}
+    lG = G.adj.copy()
+    C = set()
+    cover = False
+    
+    while (not cover):
+        # Select a vertex randomly
+        v = random.choice(list(lG.keys()))
 
-    return c
+        # Add v to C
+        C.add(v)
+
+        # Remove v from lG
+        del lG[v]
+
+        # Check for cover
+        cover = is_vertex_cover(G, C)
+
+    return C
 
 def approx3(G):
-    C = {}
+    lG = G.adj.copy()
+    C = set()
+    cover = False
 
-    return c
+    while (not cover):
+        # Select an edge randomly
+        u = random.choice([u for u in lG if lG[u]]) 
+        v = random.choice(lG[u])
+
+
+        # Add u and v to C
+        C.add(u)
+        C.add(v)
+
+        # Remove all edges incident to node u or v from G
+        lG[u] = []
+        for node in lG.keys():
+            if u in lG[node]:
+                lG[node].remove(u)
+
+        lG[v] = []
+        for node in lG.keys():
+            if v in lG[node]:
+                lG[node].remove(v)
+        
+        # Check for cover
+        cover = is_vertex_cover(G, C)
+
+    return C
+
+if testW2:
+    nodes = 15
+    edges = int(((nodes * (nodes + 1)) / 2) * 0.7)
+    RG = create_random_graph(nodes, edges)
+    while (not is_connected(RG)):
+        RG = create_random_graph(nodes, edges)
+    a1 = approx1(RG)
+    print(a1)
+    a2 = approx2(RG)
+    print(a2)
+    a3 = approx3(RG)
+    print(a3)
+    mvc = set(MVC(RG))
+    print(mvc)
+    print("a1 match: " + str(a1 == mvc))
+    print("a2 match: " + str(a2 == mvc))
+    print("a3 match: " + str(a3 == mvc))
+
+
 
