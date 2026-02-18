@@ -1,7 +1,7 @@
 # For testing
 graph = False
 testW1 = False
-testW2 = False
+testW2 = True
 
 from collections import deque
 
