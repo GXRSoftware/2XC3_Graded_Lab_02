@@ -141,15 +141,15 @@ def DFS(G, node1, node2):
     return False
 
 import random
-def create_random_graph(nodes, edges):
-    if(edges > nodes * (nodes - 1) / 2):
+def create_random_graph(i, j):
+    if(j > i * (i - 1) / 2):
         print("Invalid Number of Edges: Edges exceed maximum")
         return
-    G = Graph(nodes)
-    for e in range(edges):
-        n1, n2 = random.randint(0, nodes - 1), random.randint(0, nodes - 1)
+    G = Graph(i)
+    for e in range(j):
+        n1, n2 = random.randint(0, i - 1), random.randint(0, i - 1)
         while G.are_connected(n1, n2) or n1 == n2:
-            n1, n2 = random.randint(0, nodes - 1), random.randint(0, nodes - 1)
+            n1, n2 = random.randint(0, i - 1), random.randint(0, i - 1)
         G.add_edge(n1, n2)
     return G
 
