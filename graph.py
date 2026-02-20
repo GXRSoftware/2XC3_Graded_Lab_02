@@ -2,9 +2,9 @@
 w1e2 = False
 testW1 = False
 testW2 = True
-w2ae1 = True
-w2ae2 = True
-w2ae3 = True
+w2ae1 = False
+w2ae2 = False
+w2ae3 = False
 w2ae4 = True
 
 from collections import deque
@@ -459,10 +459,10 @@ numGraphs = 1000
 numNodes = 10
 densities = [0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1] 
 max_edges = (numNodes * (numNodes - 1)) // 2
-sumMVC = [0] * len(numNodes)
-suma1 = [0] * len(numNodes)
-suma2 = [0] * len(numNodes)
-suma3 = [0] * len(numNodes)
+sumMVC = [0] * len(densities)
+suma1 = [0] * len(densities)
+suma2 = [0] * len(densities)
+suma3 = [0] * len(densities)
 track = -1
 
 if(w2ae3):
@@ -470,8 +470,8 @@ if(w2ae3):
         track += 1
         num_edges = int(d * max_edges)
         for i in range(numGraphs):
-            G = create_random_graph(n, num_edges)
-            print("Here")
+            G = create_random_graph(numNodes, num_edges)
+            
             suma1[track] += len(approx1(graphCopy(G)))
             suma2[track] += len(approx2(graphCopy(G)))
             suma3[track] += len(approx3(graphCopy(G)))
@@ -494,7 +494,7 @@ if(w2ae3):
 numGraphs = 1000
 numNodes = 8
 numEdges = [5, 10, 15, 20, 25]
-print("here")
+
 # Worst Ratio
 worst1 = [0.0] * len(numEdges)
 worst2 = [0.0] * len(numEdges)
@@ -505,9 +505,9 @@ if(w2ae4):
     for e in numEdges:
         track += 1
         for i in range(numGraphs):
-            G = create_random_graph(n, e)
+            G = create_random_graph(numNodes, e)
             actual_mvc = len(MVC(G))
-            if actual_mvc == 0: continue # Avoid division by zero
+            if actual_mvc == 0: continue
             
             r1 = len(approx1(graphCopy(G))) / actual_mvc
             r2 = len(approx2(graphCopy(G))) / actual_mvc
@@ -521,7 +521,7 @@ if(w2ae4):
     plt.plot(numEdges, worst2, 'g--', label='Worst Ratio Approx 2')
     plt.plot(numEdges, worst3, 'b--', label='Worst Ratio Approx 3')
     plt.axhline(y=2.0, color='black', linestyle=':', label='Theoretical Limit (2.0)')
-    plt.title('Empirical Worst-Case Approximation Ratios')
+    plt.title('Worst-Case Approximation Ratios')
     plt.xlabel('Number of Edges')
     plt.ylabel('Ratio (Approx / MVC)')
     plt.legend()
