@@ -1,11 +1,11 @@
 ##### Testing/Graphing Control #####
 w1e2 = False
-testW1 = False
+testW1 = True
 testW2 = True
 w2ae1 = False
 w2ae2 = False
 w2ae3 = False
-w2ae4 = True
+w2ae4 = False
 
 from collections import deque
 
@@ -66,9 +66,10 @@ def BFS(G, node1, node2):
 
 #Breadth First Search Path
 def BFS2(G, node1, node2):
-    Q = deque([(node1, [])])
+    Q = deque([(node1, [])])                  #LOOK HERE
     marked = {node1 : True}
 
+    # This is the same as BFS above
     for node in G.adj:
         if node != node1:
             marked[node] = False
@@ -76,16 +77,16 @@ def BFS2(G, node1, node2):
     
     while len(Q) != 0:
         current_node = Q.popleft()
-        path = current_node[1].copy()
-        path.append(current_node[0])
+        path = current_node[1].copy()         #LOOK HERE
+        path.append(current_node[0])          #LOOK HERE
         for node in G.adj[current_node[0]]:
             if node == node2:
-                path.append(node)
-                return path
+                path.append(node)             #LOOK HERE
+                return path                   #LOOK HERE
             if not marked[node]:
                 Q.append((node, path))
                 marked[node] = True
-    return []
+    return []                                 #LOOK HERE
 
 if testW1:
     print(BFS2(g, 1, 6))
@@ -96,10 +97,11 @@ if testW1:
 
 #Breadth First Search Predecessor Dictionary
 def BFS3(G, node1):
-    P = {}
+    P = {}                                    #LOOK HERE
     Q = deque([node1])
     marked = {node1 : True}
 
+    # This is the same from BFS
     for node in G.adj:
         if node != node1:
             marked[node] = False
@@ -111,7 +113,7 @@ def BFS3(G, node1):
             if not marked[node]:
                 Q.append(node)
                 marked[node] = True
-                P[node] = current_node
+                P[node] = current_node        #LOOK HERE
     return P
 
 if testW1:
@@ -142,15 +144,16 @@ def DFS(G, node1, node2):
 
 import random
 def create_random_graph(i, j):
-    if(j > i * (i - 1) / 2):
+    if(j > i * (i - 1) / 2):                                             #LOOK HERE
         print("Invalid Number of Edges: Edges exceed maximum")
         return
+    
     G = Graph(i)
-    for e in range(j):
+    for e in range(j):                                                   #LOOK HERE
         n1, n2 = random.randint(0, i - 1), random.randint(0, i - 1)
-        while G.are_connected(n1, n2) or n1 == n2:
-            n1, n2 = random.randint(0, i - 1), random.randint(0, i - 1)
-        G.add_edge(n1, n2)
+        while G.are_connected(n1, n2) or n1 == n2:                       #LOOK HERE
+            n1, n2 = random.randint(0, i - 1), random.randint(0, i - 1)  #LOOK HERE
+        G.add_edge(n1, n2)                                               #LOOK HERE
     return G
 
 if testW1:
@@ -162,19 +165,19 @@ if testW1:
 
 def is_connected(G):
     Q = deque([0])
-    visited = {0 : True}
+    visited = {0 : True}                  #LOOK HERE
 
     for node in G.adj:
         if node != 0:
-            visited[node] = False
+            visited[node] = False         #LOOK HERE
     
     while len(Q) != 0:
         current_node = Q.popleft()
-        for node in G.adj[current_node]:
-            if not visited[node]:
-                Q.append(node)
-                visited[node] = True
-    return all(visited.values())
+        for node in G.adj[current_node]:  #LOOK HERE
+            if not visited[node]:         #LOOK HERE
+                Q.append(node)            #LOOK HERE
+                visited[node] = True      #LOOK HERE
+    return all(visited.values())          #LOOK HERE
 
 if testW1:
     print(is_connected(g))
