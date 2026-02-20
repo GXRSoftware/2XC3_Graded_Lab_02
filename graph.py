@@ -1,7 +1,7 @@
 ##### Testing/Graphing Control #####
 w1e2 = False
-testW1 = True
-testW2 = True
+# testW1 = True
+# testW2 = True
 w2ae1 = False
 w2ae2 = False
 w2ae3 = False
@@ -35,17 +35,6 @@ class Graph:
 
     def number_of_nodes(self):
         return len(self.adj.keys())
-
-if testW1:
-    g = Graph(7)
-    g.add_edge(1, 2)
-    g.add_edge(1, 3)
-    g.add_edge(2, 4)
-    g.add_edge(3, 4)
-    g.add_edge(3, 5)
-    g.add_edge(4, 5)
-    g.add_edge(4, 6)
-    print(g.adj)
 
 #Breadth First Search
 def BFS(G, node1, node2):
@@ -88,13 +77,6 @@ def BFS2(G, node1, node2):
                 marked[node] = True
     return []                                 #LOOK HERE
 
-if testW1:
-    print(BFS2(g, 1, 6))
-    print(BFS2(g, 1, 5))
-    print(BFS2(g, 1, 4))
-    print(BFS2(g, 0, 4))
-    print(g.number_of_nodes())
-
 #Breadth First Search Predecessor Dictionary
 def BFS3(G, node1):
     P = {}                                    #LOOK HERE
@@ -115,16 +97,6 @@ def BFS3(G, node1):
                 marked[node] = True
                 P[node] = current_node        #LOOK HERE
     return P
-
-if testW1:
-    print(BFS3(g, 0))
-    print(BFS3(g, 1))
-    print(BFS3(g, 2))
-    print(BFS3(g, 3))
-    print(BFS3(g, 4))
-    print(BFS3(g, 5))
-    print(BFS3(g, 6))
-
 
 #Depth First Search
 def DFS(G, node1, node2):
@@ -187,6 +159,35 @@ if testW1:
     print(is_connected(RG))
     RG = create_random_graph(10, 1)
     print(is_connected(RG))
+
+# Week 1 Tests
+if testW1:
+    # Graph Setup
+    g = Graph(7)
+    g.add_edge(1, 2)
+    g.add_edge(1, 3)
+    g.add_edge(2, 4)
+    g.add_edge(3, 4)
+    g.add_edge(3, 5)
+    g.add_edge(4, 5)
+    g.add_edge(4, 6)
+    print(g.adj)
+
+    # BFS2
+    print(BFS2(g, 1, 6))
+    print(BFS2(g, 1, 5))
+    print(BFS2(g, 1, 4))
+    print(BFS2(g, 0, 4))
+    print(g.number_of_nodes())
+
+    # BFS3
+    print(BFS3(g, 0))
+    print(BFS3(g, 1))
+    print(BFS3(g, 2))
+    print(BFS3(g, 3))
+    print(BFS3(g, 4))
+    print(BFS3(g, 5))
+    print(BFS3(g, 6))
 
 # Experiments
 import matplotlib
