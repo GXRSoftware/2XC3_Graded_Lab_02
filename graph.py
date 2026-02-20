@@ -1,7 +1,11 @@
-# For testing
-graph = False
+##### Testing/Graphing Control #####
+w1e2 = False
 testW1 = False
 testW2 = True
+w2ae1 = True
+w2ae2 = True
+w2ae3 = True
+w2ae4 = True
 
 from collections import deque
 
@@ -137,12 +141,15 @@ def DFS(G, node1, node2):
     return False
 
 import random
-def create_random_graph(i, j):
-    G = Graph(i)
-    for e in range(j):
-        n1, n2 = random.randint(0, i - 1), random.randint(0, i - 1)
+def create_random_graph(nodes, edges):
+    if(edges > nodes * (nodes - 1) / 2):
+        print("Invalid Number of Edges: Edges exceed maximum")
+        return
+    G = Graph(nodes)
+    for e in range(edges):
+        n1, n2 = random.randint(0, nodes - 1), random.randint(0, nodes - 1)
         while G.are_connected(n1, n2) or n1 == n2:
-            n1, n2 = random.randint(0, i - 1), random.randint(0, i - 1)
+            n1, n2 = random.randint(0, nodes - 1), random.randint(0, nodes - 1)
         G.add_edge(n1, n2)
     return G
 
@@ -195,7 +202,7 @@ import math
 ################
 # Experiment 2 #
 ################
-if(graph):
+if(w1e2):
     nodes = 100
     max_edges = (nodes * (nodes - 1)) // 2
     run_edges = list((x for x in range(max_edges // 10)))
@@ -355,5 +362,167 @@ if testW2:
     print("a2 match: " + str(a2 == mvc))
     print("a3 match: " + str(a3 == mvc))
 
+##########
+# Helper #
+##########
+def graphCopy(G):
+    cG = Graph(G.number_of_nodes())
+    cG.adj = {node: list(neighbors) for node, neighbors in G.adj.items()}
+    return cG
 
+################
+# Experiment 1 #
+################
+# Varying edges
+numGraphs = 1000
+numNodes = 8
+# The note states 30 instead of 28,
+# However 30 is above the maximum number of edges for 8 nodes,
+# So we will use the max cap
+numEdges = [1,5,10,15,20,25,28]
+# Track Sums
+sumMVC = [0] * len(numEdges)
+suma1 = [0] * len(numEdges)
+suma2 = [0] * len(numEdges)
+suma3 = [0] * len(numEdges)
+track = -1
 
+if(w2ae1):
+    for e in numEdges:
+        track += 1
+        for i in range(numGraphs):
+            # Generate Graph
+            G = create_random_graph(numNodes, e)
+            
+            # Approximate 1
+            suma1[track] += len(approx1(graphCopy(G)))
+
+            # Approximate 2
+            suma2[track] += len(approx2(graphCopy(G)))
+
+            # Approximate 3
+            suma3[track] += len(approx3(graphCopy(G)))
+
+            # MVC
+            sumMVC[track] += len(MVC(G))
+
+    plt.plot(numEdges, suma1, color='red', label='Approximation 1')
+    plt.plot(numEdges, suma2, color='green', label='Approximation 2')
+    plt.plot(numEdges, suma3, color='blue', label='Approximation 3')
+    plt.plot(numEdges, sumMVC, color='black', label='Minimum Vertex Cover')
+    plt.title('Vertex Cover Sum Comparisons by Varying Edges')
+    plt.xlabel('Number of Edges')
+    plt.ylabel('Sum')
+    plt.legend()
+    plt.show()
+
+################
+# Experiment 2 #
+################
+# Vary nodes
+numGraphs = 1000
+numNodes = [5,6,7,8,9,10,11,12,13]
+# Track Sums
+sumMVC = [0] * len(numNodes)
+suma1 = [0] * len(numNodes)
+suma2 = [0] * len(numNodes)
+suma3 = [0] * len(numNodes)
+track = -1
+
+if(w2ae2):
+    for n in numNodes:
+        track += 1
+        numEdges = n * 2 
+        print(n)
+        for i in range(numGraphs):
+            G = create_random_graph(n, numEdges)
+            suma1[track] += len(approx1(graphCopy(G)))
+            suma2[track] += len(approx2(graphCopy(G)))
+            suma3[track] += len(approx3(graphCopy(G)))
+            sumMVC[track] += len(MVC(G))
+
+    plt.plot(numNodes, suma1, color='red', label='Approximate 1')
+    plt.plot(numNodes, suma2, color='green', label='Approximate 2')
+    plt.plot(numNodes, suma3, color='blue', label='Approximate 3')
+    plt.plot(numNodes, sumMVC, color='black', label='MVC')
+    plt.title('Performance Scaling by Node Count (m = 2n)')
+    plt.xlabel('Number of Nodes')
+    plt.ylabel('Sum of Sizes')
+    plt.legend()
+    plt.show()
+
+################
+# Experiment 3 #
+################
+# Graph Density
+numGraphs = 1000
+numNodes = 10
+densities = [0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1] 
+max_edges = (numNodes * (numNodes - 1)) // 2
+sumMVC = [0] * len(numNodes)
+suma1 = [0] * len(numNodes)
+suma2 = [0] * len(numNodes)
+suma3 = [0] * len(numNodes)
+track = -1
+
+if(w2ae3):
+    for d in densities:
+        track += 1
+        num_edges = int(d * max_edges)
+        for i in range(numGraphs):
+            G = create_random_graph(n, num_edges)
+            print("Here")
+            suma1[track] += len(approx1(graphCopy(G)))
+            suma2[track] += len(approx2(graphCopy(G)))
+            suma3[track] += len(approx3(graphCopy(G)))
+            sumMVC[track] += len(MVC(G))
+
+    plt.plot(densities, suma1, color='red', label='Approximate 1')
+    plt.plot(densities, suma2, color='green', label='Approximate 2')
+    plt.plot(densities, suma3, color='blue', label='Approximate 3')
+    plt.plot(densities, sumMVC, color='black', label='MVC')
+    plt.title('Performance based on Graph Density (%)')
+    plt.xlabel('Density (Fraction of Max Edges)')
+    plt.ylabel('Sum of Sizes')
+    plt.legend()
+    plt.show()
+
+################
+# Experiment 4 #
+################
+# Worst Case
+numGraphs = 1000
+numNodes = 8
+numEdges = [5, 10, 15, 20, 25]
+print("here")
+# Worst Ratio
+worst1 = [0.0] * len(numEdges)
+worst2 = [0.0] * len(numEdges)
+worst3 = [0.0] * len(numEdges)
+track = -1
+
+if(w2ae4):
+    for e in numEdges:
+        track += 1
+        for i in range(numGraphs):
+            G = create_random_graph(n, e)
+            actual_mvc = len(MVC(G))
+            if actual_mvc == 0: continue # Avoid division by zero
+            
+            r1 = len(approx1(graphCopy(G))) / actual_mvc
+            r2 = len(approx2(graphCopy(G))) / actual_mvc
+            r3 = len(approx3(graphCopy(G))) / actual_mvc
+
+            if r1 > worst1[track]: worst1[track] = r1
+            if r2 > worst2[track]: worst2[track] = r2
+            if r3 > worst3[track]: worst3[track] = r3
+
+    plt.plot(numEdges, worst1, 'r--', label='Worst Ratio Approx 1')
+    plt.plot(numEdges, worst2, 'g--', label='Worst Ratio Approx 2')
+    plt.plot(numEdges, worst3, 'b--', label='Worst Ratio Approx 3')
+    plt.axhline(y=2.0, color='black', linestyle=':', label='Theoretical Limit (2.0)')
+    plt.title('Empirical Worst-Case Approximation Ratios')
+    plt.xlabel('Number of Edges')
+    plt.ylabel('Ratio (Approx / MVC)')
+    plt.legend()
+    plt.show()
