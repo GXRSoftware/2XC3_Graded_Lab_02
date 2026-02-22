@@ -201,7 +201,7 @@ import math
 # Experiment 1 #
 ################
 
-def experiment1():
+def experiment1(): # LOOK HERE
     m = 10
 
     # { (node, edges): list[graphs] }
@@ -565,3 +565,89 @@ if(w2ae4):
     plt.ylabel('Ratio (Approx / MVC)')
     plt.legend()
     plt.show()
+
+
+###########################
+# Independent Set Problem #
+###########################
+
+def get_nodes(graph): # LOOK HERE
+    nodes = []
+    for node in graph.adj:
+        nodes.append(node)
+    return nodes
+
+def has_edge(graph, node1, node2): # LOOK HERE
+    """
+    Checks if there exists an edge
+    between node1 and node2 in an
+    unweighted undirected graph
+    """
+    return node2 in graph[node1]
+
+def is_independent_set(graph, sub_set): # LOOK HERE
+    """
+    Determines a if sub_set of nodes
+    is an independent set of a graph
+    """
+    for i in range(len(sub_set)):
+        for j in range(i + 1, len(sub_set)):
+            if has_edge(graph, sub_set[i], sub_set[j]):
+                return False
+    return True
+
+def mis(graph): # LOOK HERE
+    """
+    Calculates the maximum independent set
+
+    We will represent our sets as lists
+    because the provided power_set function
+    does so
+    """
+    nodes = get_nodes(graph)
+    power_set = create_power_set(nodes)
+    
+    # initilize the max_independent_set
+    max_independent_set = []
+
+    for subset in power_set:
+        if is_independent_set(graph.adj, subset):
+            if len(subset) > len(max_independent_set):  
+                max_independent_set = subset
+
+    return max_independent_set
+
+def mis_experiment(): # LOOK HERE
+    """
+    The experiment to discover the relationship between mvc and mis
+
+    Note that this experiment just does a simple print rather than 
+    drawing graphs via matplotlib since there was no mention
+    of drawing an actual graph in the instruction for this problem
+    """
+    graphs_data = [
+        (20, 0),
+        (20, 7),
+        (20, 10),
+        (20, 30),
+        (20, 70),
+        (20, 100),
+        (20, 170),
+    ]
+
+    graphs = []
+
+    for (node, edges) in graphs_data:
+        new_graph = create_random_graph(node, edges)
+        graphs.append(new_graph)
+    
+    max_independent_sets = []
+    mvcs = []
+
+    for graph in graphs:
+        mvcs.append(MVC(graph))
+        max_independent_sets.append(mis(graph))
+
+    for i in range(len(mvcs)): #len(mvcs) == len(max_independent_sets)
+        print(mvcs[i], max_independent_sets[i])
+
