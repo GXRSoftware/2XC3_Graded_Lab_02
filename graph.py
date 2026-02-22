@@ -1,7 +1,7 @@
 ##### Testing/Graphing Control #####
 w1e2 = False
-# testW1 = True
-# testW2 = True
+testW1 = False
+testW2 = False
 w2ae1 = False
 w2ae2 = False
 w2ae3 = False
@@ -36,7 +36,7 @@ class Graph:
     def number_of_nodes(self):
         return len(self.adj.keys())
 
-#Breadth First Search
+# Breadth First Search
 def BFS(G, node1, node2):
     Q = deque([node1])
     marked = {node1 : True}
@@ -53,7 +53,7 @@ def BFS(G, node1, node2):
                 marked[node] = True
     return False
 
-#Breadth First Search Path
+# Breadth First Search Path
 def BFS2(G, node1, node2):
     Q = deque([(node1, [])])                  #LOOK HERE
     marked = {node1 : True}
@@ -77,7 +77,7 @@ def BFS2(G, node1, node2):
                 marked[node] = True
     return []                                 #LOOK HERE
 
-#Breadth First Search Predecessor Dictionary
+# Breadth First Search Predecessor Dictionary
 def BFS3(G, node1):
     P = {}                                    #LOOK HERE
     Q = deque([node1])
@@ -128,13 +128,6 @@ def create_random_graph(i, j):
         G.add_edge(n1, n2)                                               #LOOK HERE
     return G
 
-if testW1:
-    RG = create_random_graph(100, 50)
-
-    print(BFS(RG, 0, 99))
-    print(BFS2(RG, 0, 99))
-    print(BFS3(RG, 0))
-
 def is_connected(G):
     Q = deque([0])
     visited = {0 : True}                  #LOOK HERE
@@ -150,15 +143,6 @@ def is_connected(G):
                 Q.append(node)            #LOOK HERE
                 visited[node] = True      #LOOK HERE
     return all(visited.values())          #LOOK HERE
-
-if testW1:
-    print(is_connected(g))
-    g.add_edge(0, 1)
-    print(is_connected(g))
-    RG = create_random_graph(10, 45)
-    print(is_connected(RG))
-    RG = create_random_graph(10, 1)
-    print(is_connected(RG))
 
 # Week 1 Tests
 if testW1:
@@ -188,6 +172,22 @@ if testW1:
     print(BFS3(g, 4))
     print(BFS3(g, 5))
     print(BFS3(g, 6))
+
+    # Random Graph Tests
+    RG = create_random_graph(100, 50)
+
+    print(BFS(RG, 0, 99))
+    print(BFS2(RG, 0, 99))
+    print(BFS3(RG, 0))
+
+    # Connected Tests
+    print(is_connected(g))
+    g.add_edge(0, 1)
+    print(is_connected(g))
+    RG = create_random_graph(10, 45)
+    print(is_connected(RG))
+    RG = create_random_graph(10, 1)
+    print(is_connected(RG))
 
 # Experiments
 import matplotlib
