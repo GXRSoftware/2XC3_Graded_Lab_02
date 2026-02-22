@@ -144,6 +144,62 @@ def is_connected(G):
                 visited[node] = True      #LOOK HERE
     return all(visited.values())          #LOOK HERE
 
+def DFS2(G, node1, node2):
+    S = [(node1, [])] # LOOk here
+    marked = {}
+    for node in G.adj:
+        marked[node] = False
+    while len(S) != 0:
+        current_node = S.pop()
+        path = current_node[1].copy() # Look here
+        path.append(current_node[0]) # look here
+
+        if not marked[current_node[0]]:
+            marked[current_node[0]] = True
+
+            for node in G.adj[current_node[0]]:
+                if node == node2:
+                    path.append(node) # Look here
+                    return path # Look here
+                
+                S.append((node,path)) # Look here
+    return [] # Look Here
+
+def DFS3(G, node1):
+    P = {} # Look here
+    S = [node1]
+    marked = {}
+    for node in G.adj:
+        marked[node] = False
+    while len(S) != 0:
+        current_node = S.pop()
+        if not marked[current_node]:
+            marked[current_node] = True
+            for node in G.adj[current_node]:
+                S.append(node)
+                P[node] = current_node #look here
+
+    return P # look here
+
+def has_cycle(G):
+    S = [(0, -1)] #LOOK HERE
+    marked = {}
+
+    for node in G.adj:
+        marked[node] = False
+
+    while len(S) != 0:
+        current_node, parent = S.pop() #LOOK HERE
+
+        if not marked[current_node]:
+            marked[current_node] = True
+
+            for node in G.adj[current_node]:
+                if node != parent and marked[node]: #LOOK HERE
+                    return True
+                S.append((node, current_node)) #LOOK HERE
+    return False
+
 # Week 1 Tests
 if testW1:
     # Graph Setup
