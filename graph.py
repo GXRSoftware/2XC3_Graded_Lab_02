@@ -605,7 +605,7 @@ def mis(graph): # LOOK HERE
     does so
     """
     nodes = get_nodes(graph)
-    power_set = create_power_set(nodes)
+    power_set = power_set(nodes)
     
     # initilize the max_independent_set
     max_independent_set = []
