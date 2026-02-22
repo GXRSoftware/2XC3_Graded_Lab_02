@@ -201,6 +201,41 @@ import math
 # Experiment 1 #
 ################
 
+def experiment1():
+    m = 10
+
+    # { (node, edges): list[graphs] }
+    graphs = { 
+        (1000, 1000): [],
+        (1000, 1500): [],
+        (1000, 1700): [],
+        (1000, 1900): [],
+        (1000, 2000): [],
+        (1000, 2200): [],
+        (1000, 2500): [],
+    }
+
+    for (node, edges) in graphs:
+        for i in range(m):
+            new_graph = create_random_graph(node, edges)
+            graphs[(node, edges)].append(new_graph)
+
+    x_values = [] # edges
+    y_values = [] # proballities
+
+    for (node, edges) in graphs:
+        cycles_num = 0
+        for graph in graphs[(node, edges)]:
+            cycles_num += 1 if has_cycle(graph) else 0
+        x_values.append(edges)
+        y_values.append(cycles_num / m)
+
+    # draw the graph
+    plt.plot(x_values, y_values, color="blue")
+    plt.title("Probality of cycles")
+    plt.xlabel("Number of edges")
+    plt.ylabel("Probality of a cycle")
+    plt.savefig("./Graphs/experiment1.png")
 
 
 ################
