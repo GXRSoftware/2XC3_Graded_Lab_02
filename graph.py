@@ -202,18 +202,13 @@ import math
 ################
 
 def experiment1(): # LOOK HERE
-    m = 10
+    m = 1000
 
     # { (node, edges): list[graphs] }
-    graphs = { 
-        (1000, 1000): [],
-        (1000, 1500): [],
-        (1000, 1700): [],
-        (1000, 1900): [],
-        (1000, 2000): [],
-        (1000, 2200): [],
-        (1000, 2500): [],
-    }
+    graphs = {}
+
+    for i in range(0, 100, 1):
+        graphs[(100, i)] = []
 
     for (node, edges) in graphs:
         for i in range(m):
@@ -228,13 +223,13 @@ def experiment1(): # LOOK HERE
         for graph in graphs[(node, edges)]:
             cycles_num += 1 if has_cycle(graph) else 0
         x_values.append(edges)
-        y_values.append(cycles_num / m)
+        y_values.append((cycles_num / m) * 100)
 
     # draw the graph
     plt.plot(x_values, y_values, color="blue")
     plt.title("Probality of cycles")
     plt.xlabel("Number of edges")
-    plt.ylabel("Probality of a cycle")
+    plt.ylabel("Probality of a cycle in %")
     plt.savefig("./Graphs/experiment1.png")
 
 
