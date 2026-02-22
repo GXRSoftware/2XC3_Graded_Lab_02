@@ -249,7 +249,6 @@ if(w1e2):
 
     data = []
     for e in run_edges:
-        print(e)
         c = []
         for i in range(RUNS):
             G = create_random_graph(nodes, e)
