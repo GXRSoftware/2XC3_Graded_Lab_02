@@ -182,22 +182,26 @@ def DFS3(G, node1):
     return P # look here
 
 def has_cycle(G):
-    S = [(0, -1)] #LOOK HERE
-    marked = {}
+    marked = {node: False for node in G.adj}
 
-    for node in G.adj:
-        marked[node] = False
-
-    while len(S) != 0:
-        current_node, parent = S.pop() #LOOK HERE
-
-        if not marked[current_node]:
-            marked[current_node] = True
-
-            for node in G.adj[current_node]:
-                if node != parent and marked[node]: #LOOK HERE
-                    return True
-                S.append((node, current_node)) #LOOK HERE
+    # Iterate through every node 
+    for start_node in G.adj: # Look Here
+        if not marked[start_node]:
+            # DFS
+            S = [(start_node, -1)] # Look Here
+            
+            while len(S) != 0:
+                current_node, parent = S.pop() # Look Here
+                
+                if not marked[current_node]:
+                    marked[current_node] = True
+                    
+                    for neighbor in G.adj[current_node]:
+                        if neighbor == parent: # Look Here
+                            continue 
+                        if marked[neighbor]: # Look Here
+                            return True
+                        S.append((neighbor, current_node))
     return False
 
 # Week 1 Tests
