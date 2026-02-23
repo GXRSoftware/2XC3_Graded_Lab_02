@@ -659,12 +659,12 @@ def mis(graph): # LOOK HERE
     does so
     """
     nodes = get_nodes(graph)
-    power_set = power_set(nodes)
+    subsets = power_set(nodes)
     
     # initilize the max_independent_set
     max_independent_set = []
 
-    for subset in power_set:
+    for subset in subsets:
         if is_independent_set(graph.adj, subset):
             if len(subset) > len(max_independent_set):  
                 max_independent_set = subset
