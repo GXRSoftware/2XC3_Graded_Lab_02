@@ -166,20 +166,20 @@ def DFS2(G, node1, node2):
     return [] # Look Here
 
 def DFS3(G, node1):
-    P = {} # Look here
-    S = [node1]
-    marked = {}
-    for node in G.adj:
-        marked[node] = False
-    while len(S) != 0:
-        current_node = S.pop()
-        if not marked[current_node]:
-            marked[current_node] = True
-            for node in G.adj[current_node]:
-                S.append(node)
-                P[node] = current_node #look here
-
-    return P # look here
+   P = {} # Look here
+   S = [node1]
+   marked = {}
+   for node in G.adj:
+       marked[node] = False
+   marked[node1] = True # look
+   while len(S) != 0:
+       current_node = S.pop()
+       for node in G.adj[current_node]:
+           if not marked[node]:
+               S.append(node) # Look here
+               marked[node] = True # Look here
+               P[node] = current_node #look here
+   return P # look here
 
 def has_cycle(G):
     marked = {node: False for node in G.adj}
