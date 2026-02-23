@@ -144,6 +144,62 @@ def is_connected(G):
                 visited[node] = True      #LOOK HERE
     return all(visited.values())          #LOOK HERE
 
+def DFS2(G, node1, node2):
+    S = [(node1, [])] # LOOk here
+    marked = {}
+    for node in G.adj:
+        marked[node] = False
+    while len(S) != 0:
+        current_node = S.pop()
+        path = current_node[1].copy() # Look here
+        path.append(current_node[0]) # look here
+
+        if not marked[current_node[0]]:
+            marked[current_node[0]] = True
+
+            for node in G.adj[current_node[0]]:
+                if node == node2:
+                    path.append(node) # Look here
+                    return path # Look here
+                
+                S.append((node,path)) # Look here
+    return [] # Look Here
+
+def DFS3(G, node1):
+    P = {} # Look here
+    S = [node1]
+    marked = {}
+    for node in G.adj:
+        marked[node] = False
+    while len(S) != 0:
+        current_node = S.pop()
+        if not marked[current_node]:
+            marked[current_node] = True
+            for node in G.adj[current_node]:
+                S.append(node)
+                P[node] = current_node #look here
+
+    return P # look here
+
+def has_cycle(G):
+    S = [(0, -1)] #LOOK HERE
+    marked = {}
+
+    for node in G.adj:
+        marked[node] = False
+
+    while len(S) != 0:
+        current_node, parent = S.pop() #LOOK HERE
+
+        if not marked[current_node]:
+            marked[current_node] = True
+
+            for node in G.adj[current_node]:
+                if node != parent and marked[node]: #LOOK HERE
+                    return True
+                S.append((node, current_node)) #LOOK HERE
+    return False
+
 # Week 1 Tests
 if testW1:
     # Graph Setup
@@ -202,18 +258,13 @@ import math
 ################
 
 def experiment1(): # LOOK HERE
-    m = 10
+    m = 1000
 
     # { (node, edges): list[graphs] }
-    graphs = { 
-        (1000, 1000): [],
-        (1000, 1500): [],
-        (1000, 1700): [],
-        (1000, 1900): [],
-        (1000, 2000): [],
-        (1000, 2200): [],
-        (1000, 2500): [],
-    }
+    graphs = {}
+
+    for i in range(0, 100, 1):
+        graphs[(100, i)] = []
 
     for (node, edges) in graphs:
         for i in range(m):
@@ -228,13 +279,13 @@ def experiment1(): # LOOK HERE
         for graph in graphs[(node, edges)]:
             cycles_num += 1 if has_cycle(graph) else 0
         x_values.append(edges)
-        y_values.append(cycles_num / m)
+        y_values.append((cycles_num / m) * 100)
 
     # draw the graph
     plt.plot(x_values, y_values, color="blue")
     plt.title("Probality of cycles")
     plt.xlabel("Number of edges")
-    plt.ylabel("Probality of a cycle")
+    plt.ylabel("Probality of a cycle in %")
     plt.savefig("./Graphs/experiment1.png")
 
 
